@@ -1,4 +1,8 @@
-<h1>Create Your Post</h1>
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Create Your Post</h3>
 <br>
 <a href="{% url 'home_view' %}">Back to feed</a>
 <hr>
@@ -13,3 +17,5 @@
         />
     </form>
 </div>
+
+{% endblock %}

@@ -1,4 +1,8 @@
-<h1>Detail</h1>
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Detail</h3>
 <br>
 <a href="">Back to feed</a>
 <hr>
@@ -6,3 +10,5 @@
 <p>{{ post.content }}</p>
 <small>Created in {{ post.date_created }}</small>
 <hr>
+
+{% endblock %}
