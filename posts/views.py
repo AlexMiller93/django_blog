@@ -22,7 +22,7 @@ def post_detail_view(request, id):
     context = {'post': post}
     return render(request, "posts/detail.html", context)
 
-'''
+
 def post_create_view(request):
     print(request.POST)
     form = PostForm()
@@ -39,9 +39,9 @@ def post_create_view(request):
             context = {'post': post}
             
     return render(request, "posts/create.html", context)
-'''
 
-def post_update_view(request):
+
+def post_update_view(request, pk):
     context = {}
     return render(request, "posts/update.html", context)
 

@@ -9,5 +9,5 @@ class PostFormNew(forms.ModelForm):
         ordering = ['-date_created']
 
 class PostForm(forms.Form):
-    title = forms.CharField()
+    title = forms.CharField(max_length=50)
     content = forms.CharField()

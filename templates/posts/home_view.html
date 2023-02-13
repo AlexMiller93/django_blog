@@ -4,10 +4,10 @@
 
 <h3>Home</h3>
 <br>
-<a href="">Add Post</a>
+<a href="{% url 'create' %}">Add Post</a>
 <hr>
 {% for post in posts %}
-    <h3><a href="">{{ post.title }}</a></h3>
+    <h3><a href="{% url 'detail' post.id %}">{{ post.title }}</a></h3>
     <hr>
 {% endfor %}
     
