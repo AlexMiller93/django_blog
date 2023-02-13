@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, Http404
+from django.http import Http404
 
 from .models import Post
 from .forms import PostForm 
 # Create your views here.
-# def index(request):
-#     return HttpResponse("<h1>Hello, world!</h1>")
+
 
 def home_view(request):
     posts = Post.objects.all()
@@ -24,19 +23,23 @@ def post_detail_view(request, id):
 
 
 def post_create_view(request):
-    print(request.POST)
     form = PostForm()
     context = {'form': form}
     if request.method == "POST":
+        # create a form instance and populate it with data from the request:
         form = PostForm(request.POST)
+        # check whether it's valid:
         if form.is_valid():
-            title = form.get("title")
-            content = form.get("content")
+            # process the data in form.cleaned_data as required
+            title = form.cleaned_data.get("title")
+            content = form.cleaned_data.get("content")
             
-            print(f'Title: {title},\nContent: {content}')
+            # print(f'Title: {title}, Content: {content}')
             
             post = Post.objects.create(title=title, content=content)
             context = {'post': post}
+            # redirect to a new URL:
+            return redirect('/posts/')
             
     return render(request, "posts/create.html", context)
 
