@@ -6,12 +6,18 @@
 <br>
 <a href="{% url 'posts:create' %}">Add Post</a>
 
+<hr>
 
 {% if posts %}
-<h2>Feed</h2>
-
+<h2><a href='{% url 'posts:home_view' %}'>Feed</a></h2>
+<hr>
     {% for post in posts %}
         <h4><a href="{% url 'posts:detail' post.id %}">{{ post.title }}</a></h4>
+        <p>{{ post.content }}</p>
+        <small><i>Updated in {{ post.updated }}</i></small>
+        <a href="{% url 'posts:update' post.id %}">Update</a>
+        <a href="{% url 'posts:delete' post.id %}">Delete</a>
+        <hr>
     {% endfor %}
 
 {% else %}

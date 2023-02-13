@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Update Page</h3>
+<br>
+<a href="{% url 'posts:home_view' %}">Back</a>
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <input type="submit" value="Update">
+    </form>
+</div>
+{% endblock %}

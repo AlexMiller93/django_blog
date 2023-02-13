@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 
 from .models import Post
@@ -7,8 +7,10 @@ from .forms import PostForm
 
 
 def home_view(request):
-    posts = Post.objects.all()
-    context = {'posts': posts}
+    posts = Post.objects.all().order_by('-updated')
+    for post in posts:
+        short_desc = post.content[:20]
+    context = {'posts': posts, 'short_desc': short_desc}
     return render(request, "posts/home_view.html", context)
 
 def post_detail_view(request, id):
@@ -44,10 +46,32 @@ def post_create_view(request):
     return render(request, "posts/create.html", context)
 
 
-def post_update_view(request, pk):
-    context = {}
+def post_update_view(request, id):
+
+    # fetch the object related to passed id
+    post = get_object_or_404(Post, id=id)
+    
+    # pass the object as instance in form
+    form = PostForm(instance=post)
+    # post updated data
+    if request.method == "POST":
+        form = PostForm(request.POST or None, instance=post)
+    
+        # save the data from the form and
+        # redirect to detail_view
+        if form.is_valid():
+            form.save()
+            return redirect('/posts/')
+
+    context = {'form': form}
     return render(request, "posts/update.html", context)
 
-def post_delete_view(request):
-    context = {}
+def post_delete_view(request, id):
+    post = Post.objects.get(id=id)
+
+    # post updated data
+    if request.method == "POST":
+        post.delete()
+        return redirect('/posts/')
+    context = {'post': post}
     return render(request, "posts/delete.html", context)
