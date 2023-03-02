@@ -1,28 +1,41 @@
 {% extends 'base.html' %}
 
+
+
+
 {% block content %}
 
-<h3>Home</h3>
-<br>
-<a href="{% url 'posts:create' %}">Add Post</a>
 
-<hr>
+<div class="content">
+    <h2><a href="{% url 'posts:home_view' %}">Feed</a></h2>
+    <div style="padding:5px; margin:10px">
+        <a style="float:left" href="{% url 'posts:create' %}">Create new post</a>
 
-{% if posts %}
-<h2><a href='{% url 'posts:home_view' %}'>Feed</a></h2>
-<hr>
-    {% for post in posts %}
-        <h4><a href="{% url 'posts:detail' post.id %}">{{ post.title }}</a></h4>
-        <p>{{ post.content }}</p>
-        <small><i>Updated in {{ post.updated }}</i></small>
-        <a href="{% url 'posts:update' post.id %}">Update</a>
-        <a href="{% url 'posts:delete' post.id %}">Delete</a>
-        <hr>
-    {% endfor %}
-
-{% else %}
+        <form  action="{% url 'posts:search' %}" method="POST" style="float:right">
+            {% csrf_token %}
+            <input type="text" name="q" placeholder="Enter a query...">
+            <input type="submit" name="submit" value="Search">
+        </form>
+    </div>
+    <br>
+    {% if posts %}
+        {% for post in posts %}
+        <div class="post">
+            <h3><a href="{% url 'posts:detail' post.id %}">{{ post.title }}</a></h3>
+            <p>{{ post.content }}</p>
+            <small><i>Updated in {{ post.updated }}</i></small>
+            <a href="{% url 'posts:update' post.id %}">Update</a>
+            <a href="{% url 'posts:delete' post.id %}">Delete</a>
+        </div>
+        {% endfor %}
+    
+    {% else %}
     <p>No one post created</p>
-{% endif %}
+    {% endif %}
+</div>
+
+{% comment %} https://pytutorial.com/django-search-function/ {% endcomment %}
+
 
 {% endblock content %}
 

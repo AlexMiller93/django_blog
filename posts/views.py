@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
+from django.db.models import Q
 
 from .models import Post
 from .forms import PostForm 
@@ -22,6 +23,18 @@ def post_detail_view(request, id):
             raise Http404
     context = {'post': post}
     return render(request, "posts/detail.html", context)
+
+
+def post_search_view(request):
+    if request.method == "POST":
+        query = request.GET.get("q")
+        if query:
+            results = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
+            print(results)
+            context = {'results':results}   
+            return render(request, "posts/search.html", context)
+    return render(request, "posts/search.html")
+
 
 
 def post_create_view(request):

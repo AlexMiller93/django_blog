@@ -3,6 +3,10 @@ from django.db import models
 # Create your models here.
 class Post(models.Model):
     title = models.CharField(max_length=100)
+    author = models.ForeignKey(
+        'auth.User',
+        on_deete=models.CASCADE,
+    )
     content = models.TextField()
     date_created = models.DateField(auto_now_add=True)
     updated = models.DateField(auto_now=True)
