@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="content">
+    <header><a href="{% url 'home' %}">Feed</a></header>
+    <div style="padding:5px; margin:10px">
+        <a style="float:left" href="{% url 'post_new' %}">Create new post</a>
+        <form  action="" method="POST" style="float:right">
+            {% csrf_token %}
+            <input type="text" name="q" placeholder="Enter a query...">
+            <input type="submit" name="submit" value="Search">
+        </form>
+    </div>
+    <br>
+    {% for post in post_list %}  
+        <div class="post">
+            <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
+            <p>{{ post.content }}</p>
+            <small><i>Updated in {{ post.updated }}</i></small>
+            <a href="{% url 'post_edit' post.pk %}">Edit</a>
+            <a href="{% url 'post_delete' post.pk %}">Delete</a>
+        </div>
+    {% endfor %}
+</div>
+
+{% comment %} https://pytutorial.com/django-search-function/ {% endcomment %}
+
+{% endblock content %}
+

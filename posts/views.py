@@ -1,12 +1,36 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import Http404
-from django.db.models import Q
+# from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 
 from .models import Post
-from .forms import PostForm 
 # Create your views here.
 
+class BlogListView(ListView):
+    model = Post
+    template_name = 'posts/home.html'
+    
+class BlogDetailView(DetailView):
+    model = Post
+    template_name = 'posts/detail.html' #
+    
+class BlogCreateView(CreateView):
+    model = Post
+    template_name = 'posts/create.html'
+    fields = ['title', 'author', 'content']
 
+
+class BlogUpdateView(UpdateView):
+    model = Post
+    template_name = 'posts/update.html'
+    fields = ['title', 'content']
+
+class BlogDeleteView(DeleteView):
+    model = Post
+    template_name = 'posts/delete.html'
+    success_url = reverse_lazy('home')
+    
+'''
 def home_view(request):
     posts = Post.objects.all().order_by('-updated')
     for post in posts:
@@ -23,8 +47,7 @@ def post_detail_view(request, id):
             raise Http404
     context = {'post': post}
     return render(request, "posts/detail.html", context)
-
-
+    
 def post_search_view(request):
     if request.method == "POST":
         query = request.GET.get("q")
@@ -88,3 +111,4 @@ def post_delete_view(request, id):
         return redirect('/posts/')
     context = {'post': post}
     return render(request, "posts/delete.html", context)
+'''

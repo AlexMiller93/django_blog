@@ -2,9 +2,9 @@
 
 {% block content %}
 
-<h3>Create Your Post</h3>
+<h2 style="text-align: center">Create Your Post</h2>
 <br>
-<a href="{% url 'posts:home_view' %}">Back</a>
+<a href="{% url 'home' %}">Back</a>
 <div style="margin-top: 30px;" >
     <form method="POST" action="">
         {% csrf_token %}
@@ -12,9 +12,10 @@
         <input 
             style="margin-top: 10px;" 
             type='submit' 
-            value='Create post'
+            value='Save'
         />
     </form>
 </div>
 
 {% endblock %}
+

@@ -1,0 +1,52 @@
+body {
+
+}
+
+header {
+    font-size: 25px;
+    font-family: 'Golos Text', sans-serif;
+}
+.content {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.post {
+    margin: 15px;
+    padding: 20px;
+    border: 1px solid;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px 0.5px;
+}
+
+h1, h2, h3{
+    font-family: 'Raleway', sans-serif;
+}
+
+header,h1,h2 {
+    text-align: center;
+}
+
+a {
+    color:blueviolet; 
+    
+}
+
+a:hover{
+    color:darkturquoise;
+}
+
+nav a{
+    color:deeppink;
+}
+
+
+.post h3 a,
+.post h3 a:visited {
+    color:blue;
+    text-decoration:solid;
+}
+
+.post a{
+    color:green;
+}
