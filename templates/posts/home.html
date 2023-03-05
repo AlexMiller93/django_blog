@@ -4,13 +4,16 @@
 {% block content %}
 
 <div class="content">
+    
     <header><a href="{% url 'home' %}">Feed</a></header>
     <div style="padding:5px; margin:10px">
         <a style="float:left" href="{% url 'post_new' %}">Create new post</a>
-        <form  action="" method="POST" style="float:right">
+
+        {% comment %} {% url 'search_results' %} {% endcomment %}
+        <form  action="" method="post" style="float:right">
             {% csrf_token %}
-            <input type="text" name="q" placeholder="Enter a query...">
-            <input type="submit" name="submit" value="Search">
+            <input type="text" name="q" placeholder="Enter a query..." value='{{ request.GET.q }}'>
+            <input class="button" type="submit" value="Search">
         </form>
     </div>
     <br>

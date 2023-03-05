@@ -1,8 +1,17 @@
 <nav>
+    <div class="nav-left">
+        <p><a href='{% url "home" %}'>My Blog</a></p>
+    </div>
     
-    <a href='{% url "home" %}'>My Blog</a>
-    <a style="float:right; margin-right:10px;" href="">Login</a>
-    <a style="float:right; margin-right:10px;" href="">Register</a>
-    <a style="float:right; margin-right:10px;" href="">Logout</a>
+    <div class="nav-right">
+        {% if user.is_authenticated %}
+            <p style="float:left;">Hi, {{ user.username }}!</p>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <p style="float:left;">You are not logged in</p>
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+            
+        <br>
+    </div>
 </nav>
-<hr>

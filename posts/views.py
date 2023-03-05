@@ -1,6 +1,7 @@
 # from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.db.models import Q
 from django.urls import reverse_lazy
 
 from .models import Post
@@ -10,6 +11,7 @@ class BlogListView(ListView):
     model = Post
     template_name = 'posts/home.html'
     
+
 class BlogDetailView(DetailView):
     model = Post
     template_name = 'posts/detail.html' #
@@ -29,7 +31,59 @@ class BlogDeleteView(DeleteView):
     model = Post
     template_name = 'posts/delete.html'
     success_url = reverse_lazy('home')
+
+# TODO Make simple search maybe with CBV or FBV
+
+class BlogSearchResultsView(ListView):
+    model = Post
+    template_name = 'posts/search.html'
     
+    # https://stackoverflow.com/questions/13416502/django-search-form-in-class-based-listview
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            object_list = self.model.objects.filter(title__icontains=query)
+        else:
+            object_list = self.model.objects.none()
+        return object_list
+    ''' 
+    # https://learndjango.com/tutorials/django-search-tutorial
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        object_list =  Post.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query))
+        
+        return object_list
+    '''
+    
+    '''
+    def post_search_view(request):
+    if request.method == "POST":
+        query = request.GET.get("q")
+        if query:
+            results = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
+            print(results)
+            context = {'results':results}   
+            return render(request, "posts/search.html", context)
+    return render(request, "posts/search.html")
+    '''
+        
+    '''
+    def get_queryset(self):
+        
+        title = self.kwargs.get('title', '')
+        object_list = self.model.objects.all()
+        if title:
+            object_list = object_list.filter(title__icontains=title)
+
+        query = self.request.GET.get('q')
+        if query:
+            object_list = self.model.objects.filter(title__icontains=query)
+        else:
+            object_list = self.model.objects.none()
+
+        return object_list
+    '''
 '''
 def home_view(request):
     posts = Post.objects.all().order_by('-updated')
@@ -48,15 +102,7 @@ def post_detail_view(request, id):
     context = {'post': post}
     return render(request, "posts/detail.html", context)
     
-def post_search_view(request):
-    if request.method == "POST":
-        query = request.GET.get("q")
-        if query:
-            results = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))
-            print(results)
-            context = {'results':results}   
-            return render(request, "posts/search.html", context)
-    return render(request, "posts/search.html")
+
 
 
 

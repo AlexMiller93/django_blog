@@ -1,18 +1,21 @@
 {% extends 'base.html' %}
 
-<h3>Search Page</h3>
-<br>
-<a href="{% url 'home' %}">Back</a>
-
-{% comment %} <form action="{% url 'search' %}">
-    {% csrf_token %}
-    <input type="text" name="q">
-    <input type="submit" name="submit" value="Search">
-</form> {% endcomment %}
-
-{% for result in results %}
-    <p>{{ result }}</p>
-    {% comment %} <h3>{{ post.title }}</h3>
-    <p>{{ post.content }}</p>
-    <small><i>Updated in {{ post.updated }}</i></small> {% endcomment %}
-{% endfor %}
+<div class="content">
+    <h3 style="text-align: center">Search Results</h3>
+    <br>
+    <a href="{% url 'home' %}">Back</a>
+    
+    {% if object_list %}
+        
+        {% for post in object_list %}
+        <div class="post">
+            <p>{{ post.title }}</p>
+            {% comment %} <h3>{{ post.title }}</h3>
+            <p>{{ post.content }}</p>
+            <small><i>Updated in {{ post.updated }}</i></small> {% endcomment %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No one corresponds your query</p>
+    {% endif %}
+</div>
