@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block title %}Sign Up{% endblock title %}
+
 {% block content %}
     <div class="content">
         <h2 style="text-align:center">Sign Up</h2>
@@ -7,7 +9,7 @@
         <div class='post'>
             <form action="" method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
+                {{ form.as_p}}
                 <button type="submit">Sign Up</button>
             </form>
         </div>

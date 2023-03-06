@@ -1,21 +1,26 @@
 {% extends 'base.html' %}
 
+{% block title %}Search results{% endblock title %}
+
 <div class="content">
+    {% block content %}
     <h3 style="text-align: center">Search Results</h3>
     <br>
     <a href="{% url 'home' %}">Back</a>
     
-    {% if object_list %}
-        
-        {% for post in object_list %}
-        <div class="post">
-            <p>{{ post.title }}</p>
-            {% comment %} <h3>{{ post.title }}</h3>
-            <p>{{ post.content }}</p>
-            <small><i>Updated in {{ post.updated }}</i></small> {% endcomment %}
-        </div>
-        {% endfor %}
-    {% else %}
-        <p>No one corresponds your query</p>
-    {% endif %}
+        {% if object_list %}
+            
+            {% for post in object_list %}
+            <div class="post">
+                <p>{{ post.title }}</p>
+                {% comment %} <h3>{{ post.title }}</h3>
+                <p>{{ post.content }}</p>
+                <small><i>Updated in {{ post.updated }}</i></small> {% endcomment %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No one corresponds your query</p>
+        {% endif %}
+
+    {% endblock content %}
 </div>
