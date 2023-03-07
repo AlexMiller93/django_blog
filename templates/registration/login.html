@@ -3,20 +3,31 @@
 {% block title %}Login{% endblock title %}
 
 {% block content %}
-<div class="content">
-    <h2 style="text-align:center">Login page</h2>
-    <a href="{% url 'home' %}">Back</a>
-    <div class='post'>
-        <form action="" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Login</button>
-        </form>
-        <div class="sub">
-            <p>Don't have an account?</p>
-            <a style="margin-left:10px;" 
-                href="{% url 'signup'%}">Register</a>
+
+<div class="container text-center">
+    <div class="row">
+        <!-- TODO make link more attractive-->
+        <a href="{% url 'home' %}">Back</a>
+
+        <div class="col align-self-center">
+            <h4>Login page</h4>
         </div>
     </div>
 </div>
+
+<div class="container text-left">
+    <div class="card w-70 mb-5">
+        <div class="card-body">
+            <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-info">Login</button>
+            <p>Don't have an account?</p>
+            <a style="margin-left:10px;" 
+                href="{% url 'signup'%}">Register</a>
+            </form>
+        </div>
+    </div>
+</div>
+
     {% endblock content %}

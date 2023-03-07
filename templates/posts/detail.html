@@ -3,17 +3,26 @@
 {% block title %}Post's detail{% endblock title %}
 
 {% block content %}
-<div class="content">
-    <h2 style="text-align: center">Post Detail</h3>
-    <br>
-    <a href="{% url 'home' %}">Back</a>
-    <hr>
-    <div class='post'>
-        <h3>{{ post.title }}</h3>
-        <p>{{ post.content }}</p>
-        <small><i>Created in {{ post.date_created }}</i></small>
-        <small>Updated in {{ post.updated }}</small>
-        <hr>
+
+<div class="container text-center">
+    <div class="row">
+        <!-- TODO make link more attractive-->
+        <a href="{% url 'home' %}">Back</a>
+
+        <div class="col align-self-center">
+            <h4>Post Detail</h4>
+        </div>
+    </div>
+</div>
+
+<div class="container text-left">
+    <div class="card w-70 mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p class="card-text">{{ post.content }}</p>
+            <p class="card-text"><i><small class="text-muted">Created in {{ post.date_created }}</small></i></p>
+            <p class="card-text"><small class="text-muted">Updated in {{ post.updated }}</small></p>
+        </div>
     </div>
 </div>
 

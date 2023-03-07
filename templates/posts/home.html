@@ -4,30 +4,32 @@
 
 {% block content %}
 
-<div class="content">
-    
-    <header><a href="{% url 'home' %}">Feed</a></header>
-    <div style="padding:5px; margin:10px">
-        <a style="float:left" href="{% url 'post_new' %}">Create new post</a>
-
-        {% comment %} {% url 'search_results' %} {% endcomment %}
-        <form  action="" method="post" style="float:right">
-            {% csrf_token %}
-            <input type="text" name="q" placeholder="Enter a query..." value='{{ request.GET.q }}'>
-            <input class="button" type="submit" value="Search">
-        </form>
-    </div>
-    <br>
-    {% for post in post_list %}  
-        <div class="post">
-            <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
-            <p>{{ post.content }}</p>
-            <small><i>Updated in {{ post.updated }}</i></small>
-            <a href="{% url 'post_edit' post.pk %}">Edit</a>
-            <a href="{% url 'post_delete' post.pk %}">Delete</a>
+<div class="container text-center">
+    <div class="row">
+        <div class="col align-self-center">
+            <h3><a href="{% url 'home' %}">Feed</a></h3>
         </div>
-    {% endfor %}
+    </div>
 </div>
+
+{% for post in post_list %}
+    <div class="container text-left">
+        <div class="card w-70 mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
+                <p class="card-text">{{ post.content }}</p>
+                <p class="card-text"><small class="text-muted">Updated in {{ post.updated }}</small></p>
+                <button type="button" class="btn btn-outline-info">
+                    <a href="{% url 'post_edit' post.pk %}">Edit</a>
+                </button>
+                <button type="button" class="btn btn-outline-danger">
+                    <a href="{% url 'post_delete' post.pk %}">Delete</a>
+                </button>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
 
 {% comment %} https://pytutorial.com/django-search-function/ {% endcomment %}
 
