@@ -1,4 +1,3 @@
-# from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.db.models import Q
@@ -8,9 +7,17 @@ from .models import Post
 # Create your views here.
 
 class BlogListView(ListView):
+    paginate_by = 3
     model = Post
+    context_object_name = "posts"
     template_name = 'posts/home.html'
     
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     if user.is_authenticated:
+    #         return Post.objects.filter(author=self.request.user)
+    #     return Post.objects.filter(author=None)
+        
 
 class BlogDetailView(DetailView):
     model = Post

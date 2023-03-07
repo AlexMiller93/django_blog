@@ -18,10 +18,12 @@
 <div class="container text-left">
     <div class="card w-70 mb-3">
         <div class="card-body">
-            <h5 class="card-title">{{ post.title }}</h5>
+            <h3 class="card-title">{{ post.title }}</h3>
+            <p class="card-subtitle mb-2 text-muted">Created in {{ post.date_created }} by 
+                <a href="">{{ post.cap_author }}</a>
+            </p>            
             <p class="card-text">{{ post.content }}</p>
-            <p class="card-text"><i><small class="text-muted">Created in {{ post.date_created }}</small></i></p>
-            <p class="card-text"><small class="text-muted">Updated in {{ post.updated }}</small></p>
+            <p class="card-text"><small class="text-muted">Updated {{ post.updated }} ago</small></p>
         </div>
     </div>
 </div>
