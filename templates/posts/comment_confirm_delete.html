@@ -1,16 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}Delete Post{% endblock title %}
-
 {% block content %}
 
 <div class="container text-center">
     <div class="row">
         <!-- TODO make link more attractive-->
-        <a href="{% url 'home' %}">Back</a>
+        <a href="{% url 'post_list' %}">Back</a>
 
         <div class="col align-self-center">
-            <h4>Delete Page</h4>
+            <h4>Delete comment</h4>
         </div>
     </div>
 </div>
@@ -18,13 +16,14 @@
 <div class="container text-left">
     <div class="card w-70 mb-3">
         <div class="card-body">
-            <p>Are sure yo want to delete post "{{ post.title }}"?</p>
             <form method="POST">
-                {% csrf_token %}
-                <button class="btn btn-warning" type="submit">Confirm</button>
+            {% csrf_token %}
+            <p>Are sure yo want to delete comment "{{ comment.body }}"?</p>
+                <button type="submit" class="btn btn-danger">Confirm</button>
             </form>
         </div>
     </div>
 </div>
+
 
 {% endblock %}

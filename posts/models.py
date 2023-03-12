@@ -1,43 +1,70 @@
 from datetime import datetime
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.text import slugify
 from django.utils.timezone import utc
+
+# from django.conf import settings
 
 # Create your models here.
 class Post(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=120)
+    slug = models.SlugField(blank=True, null=True, max_length=140)
     author = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE,
     )
     content = models.TextField()
-    date_created = models.DateField(auto_now_add=True)
-    updated = models.DateField(auto_now=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
 
     class Meta: 
-        ordering = ["-date_created"]
+        ordering = ['-date_created']
         
     def __str__(self):
         return self.title
     
-    def get_absolute_url(self):
-        return reverse("post_detail", args=[str(self.id)])
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.title)
+        if self.date_updated is None:
+            self.date_updated = timezone.now()
+        self.date_updated = None
+        return super().save(*args, **kwargs)
     
-    @property 
-    def post_preview(self):
-        return ' '.join(self.content.split(' ')[:10]) + " ..."
+    def update(self, *args, **kwargs):
+        kwargs.update({'date_updated': timezone.now})
+        super().update(*args, **kwargs)
+    
+    def get_absolute_url(self):
+        return reverse("post_detail", kwargs={"pk": self.pk})
+    
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    body = models.CharField(max_length=140)
+    author = models.ForeignKey(
+        get_user_model(),
+        # settings.AUTH_USER_MODEL,
+        editable=False,
+        on_delete=models.CASCADE,
+        related_name='comments',
+    )
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-date_created']
+    
+    def __str__(self):
+        return self.body[:50]
+
+    def get_absolute_url(self):
+        return reverse("post_list")
     
     @property
-    def cap_author(self):
-        return f'{self.author}'.capitalize()
-    
-    # @property
-    # def time_diff(self):
-    #     return timezone.now() - self.updated
-    
-    # def time_from_last_update(self):
-    #     if self.updated:
-    #         now = datetime.utcnow().replace(tzinfo=utc)
-    #         timediff = now - self.updated
-    #         return timediff.days()
+    def number_of_comments(self):
+        return Comment.objects.filter(post=self).count()
+# https://www.agiliq.com/books/djenofdjango/chapter4.html

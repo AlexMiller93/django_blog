@@ -1,16 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}Create post{% endblock title %}
-
 {% block content %}
 
 <div class="container text-center">
     <div class="row">
         <!-- TODO make link more attractive-->
-        <a href="{% url 'home' %}">Back</a>
+        <a href="{% url 'post_detail' post.pk %}">Back</a>
 
         <div class="col align-self-center">
-            <h4>Create Your Post</h4>
+            <h4>Update Comment</h4>
         </div>
     </div>
 </div>
@@ -19,14 +17,12 @@
     <div class="card w-70 mb-5">
         <div class="card-body">
             <form method="POST" action="">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="btn btn-success" type="submit">Save</button>
-    </form>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary" type="submit">Update</button>
+            </form>
         </div>
     </div>
 </div>
 
-
-{% endblock %}
-
+{% endblock content %}
