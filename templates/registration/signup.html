@@ -2,7 +2,7 @@
 
 {% load crispy_forms_tags %}
 
-{% block title %}Sign Up{% endblock title %}
+{% block title %}Sign Up Page{% endblock title %}
 
 {% block content %}
 
@@ -20,11 +20,78 @@
 <div class="container text-left">
     <div class="card w-70 mb-5">
         <div class="card-body">
-            <form action="" method="post">
+            <form method="post">
                 {% csrf_token %}
-                {{ form | crispy }}
-                <button type="submit" class="btn btn-primary">Sign Up</button>
+
+                <!-- Render some errors if they happened -->
+                {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <div id="form_errors">
+                            {% for key, value in form.errors.items %}
+                                <strong>{{ value }}</strong>
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endif %}
+
+                <!-- Input Forms-->
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="small mb-1">First Name:</label>
+                            {{ form.first_name }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="small mb-1">Last Name:</label>
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+                </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small mb-1">Username:</label>
+                                {{ form.username }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small mb-1">Email:</label>
+                                {{ form.email }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small mb-1">Password:</label>
+                                {{ form.password1 }}
+                                {{ form.errors.password }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label class="small mb-1">Confirm Password:</label>
+                                {{ form.password2 }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mt-4 mb-0">
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    </div>
             </form>
+            <br>
+            <div class="card-footer text-center">
+                <div class="small">
+                    <a href="#">Have an account? Go to Login</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

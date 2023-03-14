@@ -112,6 +112,7 @@ static_collected
 
 #! Special files and folders
 _notes.txt
+users.txt
 Lib/
 Include/
 Scripts/

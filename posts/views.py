@@ -226,7 +226,7 @@ class PostCommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
     
     def test_func(self):
         comment = self.get_object()
-        if self.request.user == comment.user:
+        if self.request.user == comment.author:
             return True
         return False
 

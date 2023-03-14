@@ -56,7 +56,7 @@
                     </p>
                     <p>{{ comment.body | safe }}</p>
 
-                    {% if comment.author == user %}
+                    {% if comment.author == request.user %}
                     <div>
                         <a class="btn btn-primary" 
                             href="{% url 'post_comment_edit' post.pk %}">Edit

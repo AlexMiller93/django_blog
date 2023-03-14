@@ -4,18 +4,22 @@
 
 {% block content %}
 
+<!-- Any flash messages pop up in any page because this is the base template-->
 {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-    {{ message }}
+    <div class="alert alert-dismissible" role="alert">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
-    {% endfor %}
 {% endif %}
 
 <div class="container text-center">
     <div class="row">
         <div class="col align-self-center">
-            <h3><a href="{% url 'post_list' %}">Feed</a></h3>
+            <h3><a href="/">Feed</a></h3>
         </div>
     </div>
 </div>
@@ -28,7 +32,7 @@
                 <div class="card-body">
                     <h4 class="card-title">{{ post.title }}</h4>
                     <p class="card-subtitle mb-2 text-muted">{{ post.date_created | date:"N j Y" }} by 
-                        <a href="{% url 'post_list' post.author.username %}">{{ post.author | capfirst }}</a>
+                        <a href="{% url 'users-profile' %}">{{ post.author | capfirst }}</a>
                     </p>
                     <p class="card-text">{{ post.content | truncatewords:10 }}</p>
 
