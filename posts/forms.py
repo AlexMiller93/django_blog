@@ -10,6 +10,10 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content']
+        widgets = {
+            'title': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Title of the Blog'}),
+            'content': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Content of the Blog'}),
+        }
         # ordering = ['-date_created']
 
 class CommentForm(forms.ModelForm):

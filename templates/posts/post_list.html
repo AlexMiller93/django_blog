@@ -30,13 +30,14 @@
         <div class="container text-left">
             <div class="card w-60 mb-3">
                 <div class="card-body">
+                    <img class="rounded-circle article-img" src="{{ post.author.profile.avatar.url }}">
                     <h4 class="card-title">{{ post.title }}</h4>
                     <p class="card-subtitle mb-2 text-muted">{{ post.date_created | date:"N j Y" }} by 
                         <a href="{% url 'users-profile' %}">{{ post.author | capfirst }}</a>
                     </p>
                     <p class="card-text">{{ post.content | truncatewords:10 }}</p>
 
-                    <p class="card-text"><a href="{% url 'post_detail' post.id %}">Read more ...</a></p>
+                    <p class="card-text"><a href="{% url 'post_detail' post.pk %}">Read more ...</a></p>
                     
                     <p class="card-text"><small class="text-muted">Updated {{ post.date_updated | timesince}} ago</small></p>
                     
@@ -73,9 +74,8 @@
     </div>
 {% endif %}
 
-
 {% comment %} https://pytutorial.com/django-search-function/ {% endcomment %}
-
+Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta dolorem quis doloribus atque nisi sunt fuga recusandae temporibus quia consectetur ratione dolorum commodi doloremque, porro qui voluptates at quam aspernatur.
 <!-- Pagination-->
 {% if is_paginated %}
     <nav aria-label="Page navigation example">

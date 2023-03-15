@@ -38,7 +38,7 @@ class SignUpView(View):
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}')
 
-            return redirect(to='/')
+            return redirect(to='login')
 
         return render(request, self.template_name, {'form': form})
     
@@ -79,7 +79,7 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
 def profile(request):
     if request.method == 'POST':
         
-        profile = get_object_or_404(Profile,user=request.user)
+        profile = get_object_or_404(Profile, user=request.user)
         user_form = UpdateUserForm(data=request.POST, instance=request.user)
         profile_form = UpdateProfileForm(data=request.POST, files=request.FILES, instance=request.user.profile)
 
