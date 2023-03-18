@@ -1,17 +1,10 @@
-nav{
-    background-color:lightblue;
-    height: 25px;
-}
-
-nav p{
-    margin: 0;
-    margin-right: 10px;
-}
-
-header {
-    font-size: 25px;
-    font-family: 'Golos Text', sans-serif;
-}
+/* nav{
+    display: flex;
+    align-items: center;
+    height: 40px;
+    float: right;
+    text-align:justify;
+} */
 
 h1,
 h2,
@@ -19,33 +12,18 @@ h3 {
     font-family: 'Raleway', sans-serif;
 }
 
-header,
 h1,
 h2 {
     text-align: center;
 }
 
-.content {
-    width: 70%;
-    margin: 0 auto;
+.container-fluid{
+    margin-bottom: 20px;
+    text-align:center;
 }
 
-.post {
-    margin: 15px;
-    padding: 20px;
-    border: 1px solid;
-    border-radius: 5px;
-    box-shadow: 1px 1px 5px 0.5px;
-}
-
-.nav-left{
-    float:left; 
-    margin-left:10px;
-}
-
-.nav-right{
-    float: right;
-    margin-right: 10px;
+.navbar{
+    background-color: aqua;
 }
 
 .sub p{
@@ -54,26 +32,15 @@ h2 {
 }
 
 
-a {
+li>a {
     color:blueviolet; 
-    
 }
 
 a:hover{
     color:darkturquoise;
 }
 
-nav a{
-    color:deeppink;
+a:active{
+    color:rgb(217, 29, 235);
 }
 
-
-.post h3 a,
-.post h3 a:visited {
-    color:blue;
-    text-decoration:solid;
-}
-
-.post a{
-    color:green;
-}

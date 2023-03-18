@@ -2,8 +2,16 @@
 
 {% block title %}Blog{% endblock title %}
 
-{% block content %}
+{% block searchform %}
+<form class="form-inline my-2 my-lg-0 ml-5" action="{% url 'search_posts' %}" method="get">
+    <input name="q" type="text" placeholder="Search posts..">
+    <button class="btn btn-success my-2 my-sm-0 ml-4" type="submit">Search</button>
+</form>
+{% endblock searchform %}
 
+{% block content %}
+<br>
+<br>
 <!-- Any flash messages pop up in any page because this is the base template-->
 {% if messages %}
     <div class="alert alert-dismissible" role="alert">
@@ -24,58 +32,109 @@
     </div>
 </div>
 
-{% if posts %}
-    
-    {% for post in posts %}
-        <div class="container text-left">
-            <div class="card w-60 mb-3">
-                <div class="card-body">
-                    <img class="rounded-circle article-img" src="{{ post.author.profile.avatar.url }}">
-                    <h4 class="card-title">{{ post.title }}</h4>
-                    <p class="card-subtitle mb-2 text-muted">{{ post.date_created | date:"N j Y" }} by 
-                        <a href="{% url 'users-profile' %}">{{ post.author | capfirst }}</a>
-                    </p>
-                    <p class="card-text">{{ post.content | truncatewords:10 }}</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            {% if posts %}
+                {% for post in posts %}
+                    <div class="card card-signin my-5">
+                        <div class="card-body">
 
-                    <p class="card-text"><a href="{% url 'post_detail' post.pk %}">Read more ...</a></p>
-                    
-                    <p class="card-text"><small class="text-muted">Updated {{ post.date_updated | timesince}} ago</small></p>
-                    
-                    {% if request.user == post.author %}
-                    <div>
-                        <a class="btn btn-primary" href="{% url 'post_edit' post.pk %}">Edit</a> |
-                        <a class="btn btn-danger" href="{% url 'post_delete' post.pk %}">Delete</a>
+                            <!-- POST -->
+                            <a href="{{ post.get_absolute_url }}">
+                                <img class="rounded-circle article-img" 
+                                    src="{{ post.author.profile.avatar.url }}" 
+                                    alt="" height=50 width=50>
+                            </a>
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-subtitle mb-2 text-black-50 ">Posted on {{ post.date_created | date:"N j Y" }} by 
+                                <b><a href="{% url 'users-profile' %}">{{ post.author | capfirst }}</a></b>
+                            </p>
+                            <p class="card-text">{{ post.content | truncatewords:10 }}</p>
+
+                            <!-- LIKES -->
+                            <strong class="text-secondary">
+                                {% if post.likes.count %}
+                                    <!-- Show red like when user like some post -->
+                                    {% if user.is_authenticated and request.user in post.likes.all%}
+                                            <i class="bi bi-heart-fill" style="color: red;"></i>
+                                        {% else %}
+                                            <i class="bi bi-heart-fill" style="color: blue;"></i> 
+                                    {% endif %} {{ post.likes.count }}
+                                {% else %}
+                                    <i class="bi bi-heart" style="color: red;"></i>
+                                {% endif %}
+                            </strong>
+                            <!-- ./ LIKES -->
+        
+                            <p class="card-text text-info"><a href="{% url 'post_detail' post.pk %}">Read more ...</a></p>
+                            
+                            <p class="card-text"><small class="text-muted">Updated {{ post.date_updated | timesince}} ago</small></p>
+
+                            <!-- TAGS -->
+                            {% if post.tags %}
+                                <br>
+                                <p class="text-danger ml-3"><b>Tags: <i>{{ post.tags }}</i></b></p>
+                            {% endif %}
+
+                            <!-- Edit & Delete only for author of post -->
+                            {% if request.user == post.author %}
+                            <div>
+                                <a href="{% url 'post_edit' post.pk %}">
+                                    <i class="bi bi-pencil-fill"></i></a> |
+                                <a href="{% url 'post_delete' post.pk %}">
+                                    <i class="bi bi-trash-fill"></i></a>
+                            </div>
+                            {% endif %}
+                            
+
+                            {% comment %} <button class="btn btn-white mr-3 like" id="{{ post.id }}">
+                                {% if post in liked_post %}
+                                    <a href="{% url 'post_like' %}" style="color:red;" id="likebtn{{ post.id }}"> Unlike</a> | {{post.likes.count}}
+                                {% else %}
+                                    <a href="{% url 'post_like' %}" style="color:green;" id="likebtn{{ post.id }}"> Like</a> | {{post.likes.count}}
+                                {% endif %}
+                            </button> {% endcomment %}
+                        </div>
+        
+                        <!-- Comments-->
+                        {% if post.comment_set.all %}
+                            <div class="card-footer">
+                                <a href="{% url 'post_detail' post.pk %}">
+                                    Comment{{ post.comment_set.count | pluralize }} ({{ post.comment_set.count }}) :
+                                </a>
+                                
+                                <br>
+                                {% comment %} {% for comment in post.comment_set.all %}
+                                    <p class="card-text">
+                                        <img class="rounded-circle article-img" src="{{ comment.author.profile.avatar.url }}" height=40 width=40>
+                                        <a href="">{{ comment.author | capfirst }}</a>
+                                            On {{ comment.date_created }}
+                                    </p>
+                                    <p>{{ comment }}</p>
+                                {% endfor %} {% endcomment %}
+                            </div>
+                        {% endif %}
+                        <!-- End Comments-->
+        
+                    </div> <!-- ./ class="card card-signin my-5"> -->
+                {% endfor %}
+            
+            {% else %}
+                <div class="container text-left">
+                    <div class="card w-60 mb-3">
+                        <div class="card-body">
+                            <p>No one post was written... </p>
+                        </div>
                     </div>
-                    {% endif %}
                 </div>
-                <!-- Comments-->
-                {% if post.comment_set.all %}
-                <div class="card-footer">
-                    {% for comment in post.comment_set.all %}
-                        <p class="card-text">
-                            <a href="">{{ comment.author | capfirst }}</a>
-                                On {{ comment.date_created }}
-                        </p>
-                        <p>{{ comment }}</p>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div> <!-- class="card w-60 mb-3"> -->
-        </div> <!-- class="container text-left"> -->
-    {% endfor %}
-
-{% else %}
-    <div class="container text-left">
-        <div class="card w-60 mb-3">
-            <div class="card-body">
-                <p>No one post was written... </p>
-            </div>
+            {% endif %}
         </div>
     </div>
-{% endif %}
+</div>
 
 {% comment %} https://pytutorial.com/django-search-function/ {% endcomment %}
-Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta dolorem quis doloribus atque nisi sunt fuga recusandae temporibus quia consectetur ratione dolorum commodi doloremque, porro qui voluptates at quam aspernatur.
+
 <!-- Pagination-->
 {% if is_paginated %}
     <nav aria-label="Page navigation example">
@@ -116,6 +175,31 @@ Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta dolorem quis dol
 {% endif %}
 <!-- Stop of pagination-->
 
-
 {% endblock content %}
 
+{% block jsfiles %}
+<script>
+	$(".like").click(function (e) {
+    var id = this.id;
+    var href = $('.like').find('a').attr('href');
+    e.preventDefault();
+
+    $.ajax({
+        url: href,
+        data: {
+            'likeId': id
+        },
+        success: function(response){
+            if(response.liked){
+                $('#likebtn' + id).html("Unlike");
+                $('#likebtn' + id).css("color", "red")
+            }
+            else{
+            $('#likebtn' + id).html("Like");
+            $('#likebtn' + id).css("color", "green")
+            }
+        }
+    })
+});
+</script>
+{% endblock jsfiles %}

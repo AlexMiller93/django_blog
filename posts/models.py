@@ -17,6 +17,8 @@ class Post(models.Model):
         on_delete=models.CASCADE,
     )
     content = models.TextField()
+    tags = models.CharField(max_length=100, blank=True)
+    likes = models.ManyToManyField('auth.User', related_name='post_like')
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -52,6 +54,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name='comments',
     )
+    likes = models.ManyToManyField('auth.User', related_name='comment_like')
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     
@@ -64,7 +67,21 @@ class Comment(models.Model):
     def get_absolute_url(self):
         return reverse("post_list")
     
-    @property
-    def number_of_comments(self):
-        return Comment.objects.filter(post=self).count()
+'''
+class Like(models.Model):
+    user = models.ForeignKey(
+        get_user_model(),
+        related_name='likes',
+        on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        Post,
+        related_name='likes',
+        on_delete=models.CASCADE)
+    date_created = models.DateTimeField(default=timezone.now)
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'post'], name="unique_like"),
+        ]
+'''
 # https://www.agiliq.com/books/djenofdjango/chapter4.html

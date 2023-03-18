@@ -1,42 +1,50 @@
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
-    <div class="container-fluid">
-
+<nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top"  
+    style="background-color: #e3f2fd;">
+    <div class="container">
+    {% comment %} <div class="container-fluid"> {% endcomment %}
+        
         <!-- Navbar brand-->
-        <a class="navbar-brand" href="/">My Blog</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand mr-4" href="/">My Blog</a>
+
+        <!-- Collapse button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarToggle"
+            aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <!-- Navbar collapse -->
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="collapse navbar-collapse " id="navbarNav">
+            <div class="navbar-nav mr-auto">
+                <a class="nav-item nav-link" href="/" style="color:blue;">Home</a>
+            </div>
+            {% comment %} <ul class="nav justify-content-end"> {% endcomment %}
+                
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/" style="color:blue;">Home</a>
-                </li>
                 {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'users-profile' %}" style="color:green;">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}" style="color:dark;">Logout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'post_create' %}" style="color:red;">+ Create Post</a>
-                    </li>
                     <span class="navbar-text text-right">
                         Hello, {{ user.username | capfirst}}!
                     </span>
-    
-                {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}" style="color:purple;">Sign In</a>
+                        <a class="nav-link" href="{% url 'users-profile' %}" 
+                            style="color:green;">Profile</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}" 
+                            style="color:dark;">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'post_create' %}" 
+                            style="color:red;">Create Post</a>
+                    </li>
+                {% else %}
                     <span class="navbar-text text-right">
                         You are not logged in!
                     </span>
+                    <a class="nav-item nav-link" href="{% url 'login' %}" 
+                        style="color:purple;">Sign In</a>
                 {% endif %}
             </ul>
-        </div>
+        </div> <!--./ Navbar collapse -->
     </div>
 </nav>
 

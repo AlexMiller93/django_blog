@@ -1,0 +1,8 @@
+{% for comment in post.comment_set.all %}
+        <p class="card-text">
+            <img class="rounded-circle article-img" src="{{ comment.author.profile.avatar.url }}">
+            <a href="">{{ comment.author | capfirst }}</a>
+                On {{ comment.date_created }}
+        </p>
+        <p>{{ comment }}</p>
+    {% endfor %}

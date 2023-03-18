@@ -111,8 +111,11 @@ static_collected
 .vscode/
 
 #! Special files and folders
-_notes.txt
+
+notes.txt
 users.txt
+todo.txt
+
 Lib/
 Include/
 Scripts/

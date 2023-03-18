@@ -18,19 +18,79 @@
 <div class="container text-left">
     <div class="card w-70 mb-3">
         <div class="card-body">
-            <h4 class="card-title">{{ post.title }}</h4>
-            <p class="card-subtitle mb-2 text-muted">Created in {{ post.date_created | date:"N j Y"}} by 
+
+            <!-- POST -->
+            <img class="rounded-circle article-img" 
+                src="{{ post.author.profile.avatar.url }}" 
+                height=50 width=50>
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p class="card-subtitle mb-2 text-muted">Created in {{ post.date_created | date:"N j Y" }} by 
                 <a href="#">{{ post.author | capfirst }}</a>
             </p>            
-            <p class="card-text">{{ post.content | linebreaks}}</p>
+            <p class="card-text">{{ post.content | linebreaks }}</p>
             <p class="card-text"><small class="text-muted">Updated {{ post.date_updated | timesince }} ago</small></p>
+
+            <!-- LIKES -->
+
+            <!-- Implement post like system -->
+            {% if user.is_authenticated %}
+            <form action="{% url 'post_like' object.id %}" method="POST">
+                {% csrf_token %}
+                {% if post_is_liked %}
+                <button type="submit" name="post_id" value="{{object.id}}">
+                        <span class="bi bi-hand-thumbs-up-fill" style="color: red;"></span>
+                    </button>
+                <button type="submit" name="post_id" value="{{object.id}}">
+                        <span class="bi bi-hand-thumbs-down-fill"></span>
+                    </button>
+                {% else %}
+                <button type="submit" name="post_id" value="{{object.id}}">
+                        <span class="bi bi-hand-thumbs-up-fill"></span>
+                    </button>
+                <button type="submit" name="post_id" value="{{object.id}}">
+                        <span class="bi bi-hand-thumbs-down-fill"></span>
+                    </button>
+                {% endif %}
+            </form>
+            {% else %}
+                <a class="btn btn-outline-info" href="{% url 'login' %}?next={{request.path}}">Log in to like this article!</a><br>
+            {% endif %}
+            <br>
+                <!-- Render likes -->
+                <strong class="text-secondary">
+                    {% if post.likes.count %}
+                        {% if  post_is_liked %}
+                            <i class="bi bi-heart-fill" style="color: red;"></i>
+                        {% else %}
+                            <i class="bi bi-heart-fill"></i>
+                        {% endif %}
+                        {{ post.likes.count }}
+                        
+                    <!-- No one likes -->
+                    {% else %}
+                        <i class="bi bi-heart"></i>
+                    {% endif %}
+                </strong>
+            <br>
+            <!-- ./ LIKES -->
+
+            <!-- TAGS -->
+            {% if post.tags %}
+                <br>
+                <p class="text-danger ml-3"><b>Tags: <i>{{ post.tags }}</i></b></p>
+            {% endif %}
+            <br>
+            <!-- Update/delete -->
             {% if post.author == user %}
                 <div>
-                    <a class="btn btn-primary" href="{% url 'post_edit' post.pk %}">Edit</a> |
-                    <a class="btn btn-danger" href="{% url 'post_delete' post.pk  %}">Delete</a>
+                    <a href="{% url 'post_edit' post.pk %}">
+                        <i class="bi bi-pencil-fill"></i></a> |
+                    <a href="{% url 'post_delete' post.pk %}">
+                        <i class="bi bi-trash-fill"></i></a>
                 </div>
             {% endif %}
             <hr>
+
             <!-- Comments-->
             <span class="card-title">Add a comment:</span>
             {% if user.is_authenticated %}
@@ -46,28 +106,72 @@
             {% endif %}
             
             {% if comments %}
-                <p>{{ comment.number_of_comments }} Comment{{ comment.number_of_comments|pluralize }}</p>
+                <p>{{ comments.count }} Comment{{ comments.count|pluralize }}</p>
                 <hr>
-                <h5 class="card-title">Comments:</h5>
                 {% for comment in comments %}
                     <p class="card-text">
+                        <img class="rounded-circle article-img" 
+                            src="{{ comment.author.profile.avatar.url }}" height=40 width=40>
                         <a href="#">{{ comment.author | capfirst }}</a>
                         {{ comment.date_created | timesince }} ago
                     </p>
                     <p>{{ comment.body | safe }}</p>
 
+                    <!-- Comments LIKES -->
+
+                    <!-- Implement comment like system -->
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'comment_like' post.id comment.id %}" method="POST">
+                        {% csrf_token %}
+
+                        {% if comment_is_liked %}
+                            <button type="submit" name="comment_id" value="{{object.id}}">
+                                <span class="bi bi-hand-thumbs-up-fill" style="color: red;"></span>
+                            </button>
+                            <button type="submit" name="comment_id" value="{{object.id}}">
+                                <span class="bi bi-hand-thumbs-down-fill"></span>
+                            </button>
+                        {% else %}
+                            <button type="submit" name="comment_id" value="{{object.id}}">
+                                <span class="bi bi-hand-thumbs-up-fill"></span>
+                            </button>
+                            <button type="submit" name="comment_id" value="{{object.id}}">
+                                <span class="bi bi-hand-thumbs-down-fill"></span>
+                            </button>
+                        {% endif %}
+                    </form>
+                    {% else %}
+                        <a class="btn btn-outline-info" href="{% url 'login' %}?next={{request.path}}">Log in to like this article!</a><br>
+                    {% endif %}
+                    <br>
+
+                    <!-- Render likes -->
+                    <strong class="text-secondary">
+                        {% if comment.likes.count %}
+                            {% if comment_is_liked %}
+                                <i class="bi bi-heart-fill" style="color: red;"></i>
+                            {% else %}
+                                <i class="bi bi-heart-fill" style="color: blue;"></i>
+                            {% endif %}
+                            {{ comment.likes.count }}
+                        {% else %}
+                            <i class="bi bi-heart" style="color:red;"></i>
+                        {% endif %}
+                    </strong>
+                    <br>
+
+                    <!-- Update/delete comments-->
                     {% if comment.author == request.user %}
                     <div>
-                        <a class="btn btn-primary" 
-                            href="{% url 'post_comment_edit' post.pk %}">Edit
-                        </a>
-                        <a class="btn btn-danger" 
-                            href="{% url 'post_comment_delete' post.pk %}">Delete
-                        </a>
-                        <br>
+                        <a href="{% url 'post_comment_edit' post.pk %}">
+                            <i class="bi bi-pencil-fill"></i></a> |
+                        <a href="{% url 'post_comment_delete' post.pk %}">
+                            <i class="bi bi-trash-fill"></i></a>
                     </div>
                     {% endif %}
-                {% endfor %}
+                    
+                    <hr>
+                {% endfor %} <!-- End comment loop -->
             <br>
             {% else %}
                 <p>No comments yet...</p>

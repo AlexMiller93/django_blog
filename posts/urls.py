@@ -1,29 +1,38 @@
 from django.urls import path
 
+from . import views
 from .views import (
     PostListView,
-    PostUserListView,
+    UserPostListView,
     PostDetailView,
     PostCreateView,
     PostUpdateView,
     PostDeleteView,
-    # PostSearchResultsView,
+    PostSearchResultsView,
+    
+    PostLike,
     
     PostCommentCreateView,
     PostCommentUpdateView,
     PostCommentDeleteView,
+    PostCommentLike,
 )
 
 # app_name='posts'
 urlpatterns = [
     path('', PostListView.as_view(), name='post_list'),
-    # path('user/<str:username>/', PostUserListView.as_view(), name='post_list'),
+    path('user_posts/<str:username>/', UserPostListView.as_view(), name='user_posts'),
     
     path('post/<int:pk>/', PostDetailView.as_view(), name='post_detail'),
     
     path('post/create/', PostCreateView.as_view(), name='post_create'),
     path('post/<int:pk>/edit/', PostUpdateView.as_view(), name='post_edit'),
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post_delete'),
+    
+    path('post-like/<int:pk>/', views.PostLike, name='post_like'),
+    path('post/<int:post_pk>/comment/<int:pk>/like/', PostCommentLike.as_view(), name='comment_like'),
+    
+    path('search_posts/', PostSearchResultsView.as_view(), name='search_posts'),
     
     path('post/<int:pk>/add_comment/', 
         PostCommentCreateView.as_view(), name='post_comment'),
