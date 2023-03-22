@@ -14,7 +14,6 @@ class PostForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Title of the Blog'}),
             'content': forms.Textarea(attrs={'class':'form-control', 'placeholder':'Content of the Blog'}),
         }
-        # ordering = ['-date_created']
 
 class CommentForm(forms.ModelForm):
     class Meta:

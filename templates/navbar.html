@@ -15,7 +15,9 @@
         <!-- Navbar collapse -->
         <div class="collapse navbar-collapse " id="navbarNav">
             <div class="navbar-nav mr-auto">
-                <a class="nav-item nav-link" href="/" style="color:blue;">Home</a>
+                <a href="/" style="color:blue; margin-right: 10px;">
+                    <i class="bi bi-house-door-fill"></i>
+                </a>
             </div>
             {% comment %} <ul class="nav justify-content-end"> {% endcomment %}
                 
@@ -25,7 +27,8 @@
                         Hello, {{ user.username | capfirst}}!
                     </span>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'users-profile' %}" 
+                        <a class="nav-link" 
+                            href="{% url 'user_profile' user.profile.pk %}" 
                             style="color:green;">Profile</a>
                     </li>
                     <li class="nav-item">

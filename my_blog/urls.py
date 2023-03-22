@@ -23,14 +23,16 @@ from users.views import (
     ResetPasswordView,
     ResetPasswordView,
     CustomLoginView,
-    ChangePasswordView)
+    ChangePasswordView,
+    SignUpView,
+    ProfileView)
 from users.forms import LoginForm
 
 urlpatterns = [
     
     path('admin/', admin.site.urls),
-    path('users/', include('users.urls')),
-    path("", include('posts.urls')),
+    # path('users/', include('users.urls')),
+    path('', include('posts.urls')),
     
     # path('users/', include('django.contrib.auth.urls')),
     
@@ -41,6 +43,10 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(
         template_name='registration/logout.html'), name='logout'),
 
+    path('signup/', SignUpView.as_view(), name='user_signup'),
+    
+    path('profile/<int:pk>/', ProfileView.as_view(), name='user_profile'),
+    
     path('password-reset/', ResetPasswordView.as_view(
         template_name='users/password_reset.html'), name='password_reset'),
     

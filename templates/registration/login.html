@@ -30,7 +30,7 @@
             </div>
         {% endif %}
         <div class="card-body">
-            <form action="" method="post">
+            <form method="POST">
                 {% csrf_token %}
                 <div class="form-row">
                     <div class="col-md-10 offset-md-1">
@@ -75,7 +75,7 @@
             </form>
             <div class="card-footer text-center">
                 <div class="small">
-                    <a href="{% url 'users-signup' %}">Don't have an account yet? Go to signup</a><br>
+                    <a href="{% url 'user_signup' %}">Don't have an account yet? Go to signup</a><br>
                     <a href="{% url 'password_reset' %}"><i>Forgot Password?</i></a>
                 </div>
             </div>

@@ -2,13 +2,6 @@
 
 {% block title %}Blog{% endblock title %}
 
-{% block searchform %}
-<form class="form-inline my-2 my-lg-0 ml-5" action="{% url 'search_posts' %}" method="get">
-    <input name="q" type="text" placeholder="Search posts..">
-    <button class="btn btn-success my-2 my-sm-0 ml-4" type="submit">Search</button>
-</form>
-{% endblock searchform %}
-
 {% block content %}
 <br>
 <br>
@@ -18,7 +11,8 @@
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }}">{{ message }}</div>
         {% endfor %}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <button type="button" class="close" 
+            data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -32,23 +26,38 @@
     </div>
 </div>
 
+
 <div class="container">
     <div class="row">
         <div class="col-md-8">
+            
+            {% block searchform %}
+                <form class="form-inline my-2 my-lg-0 ml-5" 
+                    action="{% url 'search_posts' %}" method="get">
+                    <input name="q" type="text" placeholder="Search posts..">
+                    <button class="btn btn-success my-2 my-sm-0 ml-4" 
+                        type="submit">Search
+                    </button>
+                </form>
+            {% endblock searchform %}
+
+            <!-- Render posts -->
             {% if posts %}
                 {% for post in posts %}
                     <div class="card card-signin my-5">
                         <div class="card-body">
 
                             <!-- POST -->
-                            <a href="{{ post.get_absolute_url }}">
+                            <a href="{% url 'user_profile' post.author.profile.pk %}">
                                 <img class="rounded-circle article-img" 
                                     src="{{ post.author.profile.avatar.url }}" 
                                     alt="" height=50 width=50>
                             </a>
                             <h5 class="card-title">{{ post.title }}</h5>
-                            <p class="card-subtitle mb-2 text-black-50 ">Posted on {{ post.date_created | date:"N j Y" }} by 
-                                <b><a href="{% url 'users-profile' %}">{{ post.author | capfirst }}</a></b>
+                            <p class="card-subtitle mb-2 text-black-50 ">
+                                Posted on {{ post.date_created | date:"N j Y" }} by 
+                                <b><a href="{% url 'user_profile' post.author.profile.pk %}">
+                                    @{{ post.author | capfirst }}</a></b>
                             </p>
                             <p class="card-text">{{ post.content | truncatewords:10 }}</p>
 
@@ -59,7 +68,7 @@
                                     {% if user.is_authenticated and request.user in post.likes.all%}
                                             <i class="bi bi-heart-fill" style="color: red;"></i>
                                         {% else %}
-                                            <i class="bi bi-heart-fill" style="color: blue;"></i> 
+                                            <i class="bi bi-heart-fill"></i> 
                                     {% endif %} {{ post.likes.count }}
                                 {% else %}
                                     <i class="bi bi-heart" style="color: red;"></i>
@@ -67,9 +76,12 @@
                             </strong>
                             <!-- ./ LIKES -->
         
-                            <p class="card-text text-info"><a href="{% url 'post_detail' post.pk %}">Read more ...</a></p>
+                            <p class="card-text text-info">
+                                <a href="{% url 'post_detail' post.pk %}">
+                                    Read more ...</a></p>
                             
-                            <p class="card-text"><small class="text-muted">Updated {{ post.date_updated | timesince}} ago</small></p>
+                            <p class="card-text"><small class="text-muted">
+                                Updated {{ post.date_updated | timesince}} ago</small></p>
 
                             <!-- TAGS -->
                             {% if post.tags %}
@@ -101,7 +113,8 @@
                         {% if post.comment_set.all %}
                             <div class="card-footer">
                                 <a href="{% url 'post_detail' post.pk %}">
-                                    Comment{{ post.comment_set.count | pluralize }} ({{ post.comment_set.count }}) :
+                                    Comment{{ post.comment_set.count | pluralize }} 
+                                    ({{ post.comment_set.count }}) :
                                 </a>
                                 
                                 <br>

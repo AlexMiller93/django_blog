@@ -1,10 +1,9 @@
-from datetime import datetime
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
-from django.utils.timezone import utc
 
 # from django.conf import settings
 
@@ -13,12 +12,12 @@ class Post(models.Model):
     title = models.CharField(max_length=120)
     slug = models.SlugField(blank=True, null=True, max_length=140)
     author = models.ForeignKey(
-        'auth.User',
+        User,
         on_delete=models.CASCADE,
     )
     content = models.TextField()
     tags = models.CharField(max_length=100, blank=True)
-    likes = models.ManyToManyField('auth.User', related_name='post_like')
+    likes = models.ManyToManyField(User, related_name='post_like')
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -41,7 +40,7 @@ class Post(models.Model):
         super().update(*args, **kwargs)
     
     def get_absolute_url(self):
-        return reverse("post_detail", kwargs={"pk": self.pk})
+        return reverse("post_detail", args=[self.pk])
     
 
 class Comment(models.Model):
@@ -54,7 +53,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name='comments',
     )
-    likes = models.ManyToManyField('auth.User', related_name='comment_like')
+    likes = models.ManyToManyField(User, related_name='comment_like')
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     

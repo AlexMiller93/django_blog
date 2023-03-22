@@ -2,25 +2,88 @@
 
 {% block title %}Search results{% endblock title %}
 
-<div class="content">
-    {% block content %}
-    <h3 style="text-align: center">Search Results</h3>
-    <br>
-    <a href="{% url 'post_list' %}">Back</a>
-    
-        {% if object_list %}
-            
-            {% for post in object_list %}
-            <div class="post">
-                <p>{{ post.title }}</p>
-                {% comment %} <h3>{{ post.title }}</h3>
-                <p>{{ post.content }}</p>
-                <small><i>Updated in {{ post.updated }}</i></small> {% endcomment %}
-            </div>
-            {% endfor %}
-        {% else %}
-            <p>No one corresponds your query</p>
-        {% endif %}
+{% block content %}
+<br>
+<br>
 
-    {% endblock content %}
+<div class="container text-center">
+    <div class="row">
+        <div class="col align-self-center">
+            <h3>Search Results</h3>
+            <a href="{% url 'post_list' %}">Back to Feed</a>
+        </div>
+    </div>
 </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            {% if object_list %}
+                {% for post in object_list %}
+                <div class="card card-signin my-5">
+                    <div class="card-body">
+
+                        <!-- POST -->
+                        <a href="{% url 'user_profile' post.author.profile.pk %}">
+                            <img class="rounded-circle article-img" 
+                                src="{{ post.author.profile.avatar.url }}" 
+                                alt="" height=50 width=50>
+                        </a>
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-subtitle mb-2 text-black-50 ">
+                            Posted on {{ post.date_created | date:"N j Y" }} by 
+                            <b><a href="{% url 'user_profile' post.author.profile.pk %}">
+                                {{ post.author | capfirst }}</a></b>
+                        </p>
+                        <p class="card-text">{{ post.content | truncatewords:10 }}</p>
+
+                        <!-- LIKES -->
+                        <strong class="text-secondary">
+                            {% if post.likes.count %}
+                                <!-- Show red like when user like some post -->
+                                {% if user.is_authenticated and request.user in post.likes.all%}
+                                        <i class="bi bi-heart-fill" style="color: red;"></i>
+                                    {% else %}
+                                        <i class="bi bi-heart-fill" style="color: blue;"></i> 
+                                {% endif %} {{ post.likes.count }}
+                            {% else %}
+                                <i class="bi bi-heart" style="color: red;"></i>
+                            {% endif %}
+                        </strong>
+                        <!-- ./ LIKES -->
+
+                        <p class="card-text text-info"><a href="{% url 'post_detail' post.pk %}">Read more ...</a></p>
+                        <p class="card-text"><small class="text-muted">Updated {{ post.date_updated | timesince}} ago</small></p>
+
+                        <!-- TAGS -->
+                        {% if post.tags %}
+                            <br>
+                            <p class="text-danger ml-3"><b>Tags: <i>{{ post.tags }}</i></b></p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Comments-->
+                    {% if post.comment_set.all %}
+                        <div class="card-footer">
+                            <a href="{% url 'post_detail' post.pk %}">
+                                Comment{{ post.comment_set.count | pluralize }} ({{ post.comment_set.count }}) :
+                            </a>
+                            <br>
+                        </div>
+                    {% endif %}
+                    <!-- End Comments-->
+
+                </div> <!-- ./ class="card card-signin my-5"> -->
+                {% endfor %}
+
+            {% else %}
+            <div class="container text-left">
+                <div class="card w-60 mb-3">
+                    <div class="card-body">
+                        <p>No one post was find ... </p>
+                        <p>Try once more </p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+{% endblock content %}

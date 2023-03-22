@@ -6,6 +6,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.urls import reverse_lazy
 
+from posts.models import Post
+
 from .forms import SignUpForm, LoginForm, UpdateUserForm, UpdateProfileForm
 from .models import Profile
 
@@ -75,6 +77,39 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
                         "please make sure you've entered the address you registered with, and check your spam folder."
     success_url = reverse_lazy('post_list')
 
+class ProfileView(View):
+    def get(self, request, pk, *args, **kwargs):
+        profile = Profile.objects.get(pk=pk)
+        posts = Post.objects.filter(author=profile.user).order_by('-date_created')
+        
+        context = {
+            'profile': profile,
+            'posts': posts,
+        }
+        return render(request, 'users/profile.html', context)
+    
+    def post(self, request, pk, *args, **kwargs):
+        profile = Profile.objects.get(pk=pk)
+        posts = Post.objects.filter(author=profile.user).order_by('-date_created')
+        user_form = UpdateUserForm(data=request.POST, instance=request.user)
+        profile_form = UpdateProfileForm(data=request.POST, files=request.FILES, instance=request.user.profile)
+        
+        if user_form.is_valid() and profile_form.is_valid():
+            profile.save()
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your profile is updated successfully')
+            return redirect(to='users-profile', pk=self.kwargs['pk'])
+        
+        context = {
+            'profile': profile,
+            'posts': posts,
+            'user_form': user_form,
+            'profile_form': profile_form
+        }
+        
+        return render(request, 'users/profile.html', context)
+'''
 @login_required
 def profile(request):
     if request.method == 'POST':
@@ -97,6 +132,7 @@ def profile(request):
         'user_form': user_form, 
         'profile_form': profile_form
     })
+'''
 
 class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     template_name = 'users/change_password.html'
