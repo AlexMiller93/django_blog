@@ -74,7 +74,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         post = self.get_object()
         return self.request.user == post.author
     
-class PostDeleteView(LoginRequiredMixin, DeleteView):
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = reverse_lazy('post_list')
 
@@ -91,7 +91,7 @@ class PostSearchResultsView(ListView):
         query = self.request.GET.get('q')
         
         object_list = self.model.objects.filter(
-            Q(title__icontains=query) | Q(content__icontains=query) | Q(comment__icontains=query)
+            Q(title__icontains=query) | Q(content__icontains=query) 
         )
         return object_list
 

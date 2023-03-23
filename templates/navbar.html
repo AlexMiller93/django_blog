@@ -23,9 +23,6 @@
                 
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
-                    <span class="navbar-text text-right">
-                        Hello, {{ user.username | capfirst}}!
-                    </span>
                     <li class="nav-item">
                         <a class="nav-link" 
                             href="{% url 'user_profile' user.profile.pk %}" 
@@ -40,9 +37,6 @@
                             style="color:red;">Create Post</a>
                     </li>
                 {% else %}
-                    <span class="navbar-text text-right">
-                        You are not logged in!
-                    </span>
                     <a class="nav-item nav-link" href="{% url 'login' %}" 
                         style="color:purple;">Sign In</a>
                 {% endif %}

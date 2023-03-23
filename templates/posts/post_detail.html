@@ -20,9 +20,11 @@
         <div class="card-body">
 
             <!-- POST -->
+            <a href="{% url 'user_profile' post.author.profile.pk %}">
             <img class="rounded-circle article-img" 
                 src="{{ post.author.profile.avatar.url }}" 
                 height=50 width=50>
+            </a>
             <h5 class="card-title">{{ post.title }}</h5>
             <p class="card-subtitle mb-2 text-muted">
                 Created in {{ post.date_created | date:"N j Y" }} by 

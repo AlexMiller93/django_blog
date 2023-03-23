@@ -6,7 +6,7 @@ class TestModels(TestCase):
     def test_model_str(self):
         post = Post.objects.create(
             title="",
-            author=self.request.user,
+            author=self.user,
             content="",
         )
         

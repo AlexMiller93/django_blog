@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3dbcee1b72a4b582916edbd589685cc4776464c2d12ce2d4e2950fcb1ac5629a"
+            "sha256": "6c11c672716b4cd7062892dc38bdb63793307872bde5ba818ee7734d1e10d2b5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -396,21 +396,28 @@
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.3.1"
         },
-        "social-auth-app-django": {
+        "send-email": {
             "hashes": [
-                "sha256:52241a25445a010ab1c108bafff21fc5522d5c8cd0d48a92c39c7371824b065d",
-                "sha256:b6e3132ce087cdd6e1707aeb1b588be41d318408fcf6395435da0bc6fe9a9795"
+                "sha256:c1aeb5d136ce8c54f576f4e8b50523d6f492e7874f25c189d621cd36da606fc9"
             ],
             "index": "pypi",
-            "version": "==5.0.0"
+            "version": "==201212"
+        },
+        "social-auth-app-django": {
+            "hashes": [
+                "sha256:e4e9eb2c8c1258f443d4f1c04cb6693c0303e8ee2fa0981ba1b371546195a939",
+                "sha256:fdf1dc6bcb8b457001d88d2279f637bc9955f1aedf750c627784bb5104601b1c"
+            ],
+            "index": "pypi",
+            "version": "==5.1.0"
         },
         "social-auth-core": {
             "hashes": [
-                "sha256:1e3440d104f743b02dfe258c9d4dba5b4065abf24b2f7eb362b47054d21797df",
-                "sha256:4686f0e43cf12954216875a32e944847bb1dc69e7cd9573d16a9003bb05ca477"
+                "sha256:359f6be5bb2d4caef6500eb6e1b40821a40dde9add8d339d539b1adbba2c9bf7",
+                "sha256:89536f218fa1a769caeaa56ef90f965ea50a81b9a7e3e5a2c5a61b832df11bde"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==4.3.0"
+            "version": "==4.4.0"
         },
         "sqlparse": {
             "hashes": [

@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect, render
@@ -12,7 +13,6 @@ from .forms import SignUpForm, LoginForm, UpdateUserForm, UpdateProfileForm
 from .models import Profile
 
 # Create your views here.
-
 class SignUpView(View):
     form_class = SignUpForm
     initial = {'key': 'value'}
@@ -44,13 +44,6 @@ class SignUpView(View):
 
         return render(request, self.template_name, {'form': form})
     
-    '''
-    def form_valid(self,form):
-        user = form.save()
-        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('post_list')
-    '''
-    
 class CustomLoginView(LoginView):
     form_class = LoginForm
 
@@ -68,38 +61,21 @@ class CustomLoginView(LoginView):
         return super(CustomLoginView, self).form_valid(form)
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
-    template_name = 'users/password_reset.html'
+    template_name = 'users/password_reset_form.html'
     email_template_name = 'users/password_reset_email.html'
-    subject_template_name = 'users/password_reset_subject'
+    subject_template_name = 'users/password_reset_subject.txt'
     success_message = "We've emailed you instructions for setting your password, " \
                         "if an account exists with the email you entered. You should receive them shortly." \
                         " If you don't receive an email, " \
                         "please make sure you've entered the address you registered with, and check your spam folder."
     success_url = reverse_lazy('post_list')
 
-class ProfileView(View):
+class ProfileView(LoginRequiredMixin, View):
     def get(self, request, pk, *args, **kwargs):
         profile = Profile.objects.get(pk=pk)
         posts = Post.objects.filter(author=profile.user).order_by('-date_created')
-        
-        context = {
-            'profile': profile,
-            'posts': posts,
-        }
-        return render(request, 'users/profile.html', context)
-    
-    def post(self, request, pk, *args, **kwargs):
-        profile = Profile.objects.get(pk=pk)
-        posts = Post.objects.filter(author=profile.user).order_by('-date_created')
-        user_form = UpdateUserForm(data=request.POST, instance=request.user)
-        profile_form = UpdateProfileForm(data=request.POST, files=request.FILES, instance=request.user.profile)
-        
-        if user_form.is_valid() and profile_form.is_valid():
-            profile.save()
-            user_form.save()
-            profile_form.save()
-            messages.success(request, 'Your profile is updated successfully')
-            return redirect(to='users-profile', pk=self.kwargs['pk'])
+        user_form = UpdateUserForm(instance=request.user)
+        profile_form = UpdateProfileForm(instance=request.user.profile)
         
         context = {
             'profile': profile,
@@ -107,42 +83,32 @@ class ProfileView(View):
             'user_form': user_form,
             'profile_form': profile_form
         }
-        
         return render(request, 'users/profile.html', context)
-'''
-@login_required
-def profile(request):
-    if request.method == 'POST':
+    
+    def post(self, request, *args, **kwargs):
+        # profile = Profile.objects.get(pk=pk)
+        # posts = Post.objects.filter(author=profile.user).order_by('-date_created')
+        user_form = UpdateUserForm(request.POST, instance=request.user)
+        profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
         
-        profile = get_object_or_404(Profile, user=request.user)
-        user_form = UpdateUserForm(data=request.POST, instance=request.user)
-        profile_form = UpdateProfileForm(data=request.POST, files=request.FILES, instance=request.user.profile)
-
         if user_form.is_valid() and profile_form.is_valid():
-            profile.save()
+            # profile.save()
             user_form.save()
             profile_form.save()
             messages.success(request, 'Your profile is updated successfully')
-            return redirect(to='users-profile')
-    else:
-        user_form = UpdateUserForm(instance=request.user)
-        profile_form = UpdateProfileForm(instance=request.user.profile)
-
-    return render(request, 'users/profile.html', {
-        'user_form': user_form, 
-        'profile_form': profile_form
-    })
-'''
+            return redirect(to='user_profile', pk=self.kwargs['pk'])
+        
+        context = {
+            # 'profile': profile,
+            # 'posts': posts,
+            'user_form': user_form,
+            'profile_form': profile_form
+        }
+        
+        return render(request, 'users/profile.html', context)
 
 class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     template_name = 'users/change_password.html'
     success_message = "Successfully Changed Your Password"
     success_url = reverse_lazy('post_list')
     
-'''
-class ProfileView(LoginRequiredMixin, UpdateView):
-    model = User
-    form_class = ProfileForm
-    success_url = reverse_lazy('post_list')
-    template_name = 'profile.html'
-'''

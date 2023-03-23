@@ -2,8 +2,12 @@
 
 {% block title %}Blog{% endblock title %}
 
+
+
 {% block content %}
 <br>
+<br>
+
 <br>
 <!-- Any flash messages pop up in any page because this is the base template-->
 {% if messages %}
@@ -23,6 +27,15 @@
         <div class="col align-self-center">
             <h3><a href="/">Feed</a></h3>
         </div>
+        {% if user.is_authenticated %}
+        <span class="text-left">
+            Hello, {{ user.username | capfirst}}!
+        </span>
+        {% else %}
+        <span class="text-left">
+            You are not logged in!
+        </span>
+        {% endif %}
     </div>
 </div>
 
@@ -189,6 +202,8 @@
 <!-- Stop of pagination-->
 
 {% endblock content %}
+
+
 
 {% block jsfiles %}
 <script>

@@ -11,6 +11,7 @@ social-auth-app-django = "*"
 python-dotenv = "*"
 pillow = "*"
 django-dotenv = "*"
+send-email = "*"
 
 [dev-packages]
 

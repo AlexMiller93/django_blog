@@ -17,7 +17,7 @@ class Post(models.Model):
     )
     content = models.TextField()
     tags = models.CharField(max_length=100, blank=True)
-    likes = models.ManyToManyField(User, related_name='post_like')
+    likes = models.ManyToManyField(User, related_name='post_like', blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -40,22 +40,33 @@ class Post(models.Model):
         super().update(*args, **kwargs)
     
     def get_absolute_url(self):
-        return reverse("post_detail", args=[self.pk])
+        return reverse('post_detail', args=[self.pk])
     
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     body = models.CharField(max_length=140)
     author = models.ForeignKey(
-        get_user_model(),
+        User,
         # settings.AUTH_USER_MODEL,
         editable=False,
         on_delete=models.CASCADE,
         related_name='comments',
     )
-    likes = models.ManyToManyField(User, related_name='comment_like')
+    likes = models.ManyToManyField(User, related_name='comment_like', blank=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='+')
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+    
+    @property
+    def children(self):
+        return Comment.objects.filter(parent=self).order_by('-date_created').all()
+
+    @property
+    def is_parent(self):
+        if self.parent is None:
+            return True
+        return False
     
     class Meta:
         ordering = ['-date_created']

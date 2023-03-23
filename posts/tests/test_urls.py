@@ -9,8 +9,9 @@ class UrlTest(TestCase):
         print(response)
         
         self.assertEqual(response.status_code, 200)
-    def test_post_detail_Page(self):
-        url = reverse('post_detail')
+        
+    def test_post_detail_Page(self, pk):
+        url = reverse('post_detail', args=[pk])
         print(f"Resolve: {resolve(url)}")
         
         self.assertEquals(resolve(url).func, PostDetailView)

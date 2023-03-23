@@ -47,8 +47,7 @@ urlpatterns = [
     
     path('profile/<int:pk>/', ProfileView.as_view(), name='user_profile'),
     
-    path('password-reset/', ResetPasswordView.as_view(
-        template_name='users/password_reset.html'), name='password_reset'),
+    path('password-reset/', ResetPasswordView.as_view(), name='password_reset'),
     
     path('password-reset-confirm/<uidb64>/<token>/',
             auth_views.PasswordResetConfirmView.as_view(
@@ -64,7 +63,7 @@ urlpatterns = [
     
     
     # add this new url entry to include the social auth's urls
-    re_path(r'^oauth/', include('social_django.urls', namespace='social')),
+    # re_path(r'^oauth/', include('social_django.urls', namespace='social')),
     
 ] 
 
