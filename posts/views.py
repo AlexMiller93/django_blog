@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -19,9 +20,9 @@ class PostListView(ListView):
     context_object_name = 'posts'
     paginate_by = 3
     
-    def get_context_data(self, **kwargs):
-        context = super(PostListView, self).get_context_data(**kwargs)
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super(PostListView, self).get_context_data(**kwargs)
+    #     return context
     
 class PostDetailView(DetailView):
     model = Post
@@ -85,7 +86,8 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class PostSearchResultsView(ListView):
     model = Post
     template_name = 'posts/search.html'
-    
+    paginate_by = 3
+    context_object_name = 'posts'
     
     def get_queryset(self):
         query = self.request.GET.get('q')
@@ -95,6 +97,11 @@ class PostSearchResultsView(ListView):
         )
         return object_list
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q')
+        return context
+    
 def post_like(request, pk):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
     if post.likes.filter(id=request.user.id).exists():

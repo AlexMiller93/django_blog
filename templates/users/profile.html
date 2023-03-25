@@ -2,19 +2,10 @@
 
 {% block title %}Profile Page{% endblock title %}Profile Page
 
-
 {% block content %}
-
-<div class="container text-center">
-    <div class="row">
-        <!-- TODO make link more attractive-->
-        <a href="{% url 'post_list' %}">Back to Feed</a>
-
-        <div class="col align-self-center">
-            <h4>Profile page</h4>
-        </div>
-    </div>
-</div>
+<br>
+<br>
+<br>
 
 <!-- Errors -->
 {% if user_form.errors %}
@@ -31,130 +22,180 @@
 {% endif %}
 <!-- End of Errors -->
 
-<!-- Profile info -->
-<div class="form-content">
-    <!-- Let change profile info if user is profile user-->
-    {% if request.user == profile.user %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-row ">
-            <img class="rounded-circle account-img" 
-            src="{{ user.profile.avatar.url }}" alt="{{ user.username | capfirst }}">
-            <div class="col-md-5">
-                <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Profile Info</legend>
-                    <label class="small mb-1">Username:</label>
-                        {{ user_form.username }}
-                    <label class="small mb-1">Email:</label>
-                        {{ user_form.email }}
-                </fieldset>
-                {% if user.is_authenticated %}
-                    <div class="form-group">
-                        <a href="{% url 'password_change' %}">Change Password</a>
-                        <hr>
-                        <label class="small mb-1">Change Avatar:</label>
-                        {{ profile_form.avatar }}
-                    </div>
-                {% endif %}
-                {% if profile.bio %}
-                    <label class="small mb-1">Bio:</label> {{ profile_form.bio }}
-                {% endif %}
-            </div>
-        </div>
-        <br><br>
-        <button type="submit" class="btn btn-dark btn-lg">Save Changes</button>
-        <button type="reset" class="btn btn-dark btn-lg">Reset</button>
-    </form>
-
-    <!-- if user not profile user - let him just watch profile info -->
-    {% else %}
-        <div class="form-row ">
-            <img class="rounded-circle account-img" 
-            src="{{ profile.avatar.url }}" alt="{{ profile.user | capfirst }}">
-            <div class="col-md-5">
-                <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Profile Info</legend>
-                    <label class="small mb-1">Username:</label>
-                    @{{ profile.user |capfirst}}
-                    {% comment %} <label class="small mb-1">Email:</label> {% endcomment %}
-
-                </fieldset>
-                {% if profile.bio %}
-                    <label class="small mb-1">Bio:</label> {{ profile.bio}}
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
-    <br>
-</div>
-
-<div class="container text-center">
+<div class="container-md text-center">
     <div class="row">
+        <!-- TODO make link more attractive-->
+        <a href="{% url 'post_list' %}">Back</a>
         <div class="col align-self-center">
-            {% if profile.user == request.user %}
-            <h3>My Feed</h3>
-            {% else %}
-            <h3>{{ profile.user | capfirst }}'s Feed</h3>
-            {% endif %}
+            <h4>Profile page</h4>
         </div>
     </div>
 </div>
 
-<!-- USER'S FEED -->
-<div class="container">
+<!-- Change profile settings-->
+<div class="container-md">
     <div class="row">
-        <div class="col-md-8">
+
+        <!-- Left sidebar-->
+        <div class="col-sm-3">
+        </div>
+
+        <!-- Profile info -->
+        <div class="col-sm-6 col-10">
+            <div class="card card-signin my-5 text-bg-light border-dark">
+                <div class="card-body">
+                    <div class="form-content">
+        
+                        <!-- Let change profile info if user is profile user-->
+                        {% if request.user == profile.user %}
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-row ">
+                                <img class="rounded-circle account-img" 
+                                src="{{ user.profile.avatar.url }}" alt="{{ user.username | capfirst }}">
+                                <div class="col-md-5">
+                                    <fieldset class="form-group">
+                                        <legend class="border-bottom mb-4">Profile Info</legend>
+                                        <label class="small mb-1">Username:</label>
+                                            {{ user_form.username }}
+                                        <label class="small mb-1">Email:</label>
+                                            {{ user_form.email }}
+                                    </fieldset>
+                                    {% if user.is_authenticated %}
+                                        <div class="form-group">
+                                            <a href="{% url 'password_change' %}">Change Password</a>
+                                            <hr>
+                                            <label class="small mb-1">Change Avatar:</label>
+                                            {{ profile_form.avatar }}
+                                        </div>
+                                    {% endif %}
+                                    {% if profile.bio %}
+                                        <label class="small mb-1">Bio:</label> {{ profile_form.bio }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <br><br>
+                            <div class="d-flex-md-fill gap-2 d-md-block">
+                                <button class="btn btn-success" type="submit">Save Changes</button>
+                                <button class="btn btn-danger" type="reset">Reset</button>
+                            </div>
+                        </form>
+            
+                        <!-- if user not profile user - let him just watch profile info -->
+                        {% else %}
+                            <div class="form-row ">
+                                <img class="rounded-circle account-img" 
+                                src="{{ profile.avatar.url }}" alt="{{ profile.user | capfirst }}">
+                                <div class="col-md-5">
+                                    <fieldset class="form-group">
+                                        <legend class="border-bottom mb-4">Profile Info</legend>
+                                        <label class="small mb-1">Username:</label>
+                                        {{ profile.user | capfirst}}
+                                        {% if profile.user.email %}
+                                        <label class="small mb-1">Email:</label>
+                                        {{ profile.user.email }}
+                                        {% endif %}
+            
+                                    </fieldset>
+                                    {% if profile.bio %}
+                                        <label class="small mb-1">Bio:</label> 
+                                        {{ profile.bio}}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right sidebar-->
+        <div class="col-sm-3">
+        </div>
+    </div>
+</div>
+
+<div class="container-md text-center">
+    <div class="row">
+        <!-- PROFILE'S FEED -->
+        <div class="col-sm-12">
+            <div class="align-self-center">
+                {% if profile.user == request.user %}
+                    <h3>My Feed</h3>
+                {% else %}
+                    <h3>{{ profile.user | capfirst }}'s Feed</h3>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Render posts -->
+<div class="container-md">
+    <div class="row">
+
+        <!-- Left sidebar-->
+        <div class="col-sm-2">
+        </div>
+
+
+        <div class="col-sm-8">
+            <!-- Render posts -->
             {% if posts %}
                 {% for post in posts %}
-                    <div class="card card-signin my-5">
+                    <div class="card card-signin my-5 text-bg-light border-dark">
                         <div class="card-body">
-
-                            <!-- POST -->
-                            <a href="#">
+                            <article>
+                                <!-- POST -->
                                 <img class="rounded-circle article-img" 
                                     src="{{ post.author.profile.avatar.url }}" 
                                     alt="" height=50 width=50>
-                            </a>
-                            <h5 class="card-title">{{ post.title }}</h5>
-                            <p class="card-subtitle mb-2 text-black-50 ">Posted on {{ post.date_created | date:"N j Y" }} by 
-                                <b><a href="#">@{{ post.author | capfirst }}</a></b>
-                            </p>
-                            <p class="card-text">{{ post.content | truncatewords:10 }}</p>
+                                <h5 class="card-title">{{ post.title }}</h5>
+                                <p class="card-subtitle mb-2 text-black-50 ">
+                                    Posted on {{ post.date_created | date:"N j Y" }} by 
+                                    <b><a href="#">@{{ post.author | capfirst }}</a></b>
+                                </p>
+                                <p class="card-text">{{ post.content | truncatewords:10 }}</p>
 
-                            <!-- LIKES -->
-                            <strong class="text-secondary">
-                                {% if post.likes.count %}
-                                    <!-- Show red like when user like some post -->
-                                    {% if user.is_authenticated and request.user in post.likes.all%}
-                                            <i class="bi bi-heart-fill" style="color: red;"></i>
-                                        {% else %}
-                                            <i class="bi bi-heart-fill" style="color: blue;"></i> 
-                                    {% endif %} {{ post.likes.count }}
-                                {% else %}
-                                    <i class="bi bi-heart" style="color: red;"></i>
+                                <!-- LIKES -->
+                                <strong class="text-secondary">
+                                    {% if post.likes.count %}
+                                        <!-- Show red like when user like some post -->
+                                        {% if user.is_authenticated and request.user in post.likes.all%}
+                                                <i class="bi bi-heart-fill" style="color: red;"></i>
+                                            {% else %}
+                                                <i class="bi bi-heart-fill" style="color: blue;"></i> 
+                                        {% endif %} {{ post.likes.count }}
+                                    {% else %}
+                                        <i class="bi bi-heart" style="color: red;"></i>
+                                    {% endif %}
+                                </strong>
+                                <!-- ./ LIKES -->
+            
+                                <p class="card-text text-info">
+                                    <a href="{% url 'post_detail' post.pk %}">
+                                        Read more ...</a></p>
+                                
+                                <p class="card-text"><small class="text-muted">
+                                    Updated {{ post.date_updated | timesince}} ago</small></p>
+
+                                <!-- TAGS -->
+                                {% if post.tags %}
+                                    <br>
+                                    <p class="text-danger ml-3"><b>Tags: <i>{{ post.tags }}</i></b></p>
                                 {% endif %}
-                            </strong>
-                            <!-- ./ LIKES -->
-        
-                            <p class="card-text text-info"><a href="{% url 'post_detail' post.pk %}">Read more ...</a></p>
-                            
-                            <p class="card-text"><small class="text-muted">Updated {{ post.date_updated | timesince}} ago</small></p>
 
-                            <!-- TAGS -->
-                            {% if post.tags %}
-                                <br>
-                                <p class="text-danger ml-3"><b>Tags: <i>{{ post.tags }}</i></b></p>
-                            {% endif %}
-
-                            <!-- Edit & Delete only for author of post -->
-                            {% if request.user == post.author %}
-                            <div>
-                                <a href="{% url 'post_edit' post.pk %}">
-                                    <i class="bi bi-pencil-fill"></i></a> |
-                                <a href="{% url 'post_delete' post.pk %}">
-                                    <i class="bi bi-trash-fill"></i></a>
-                            </div>
-                            {% endif %}
+                                <!-- Edit & Delete only for author of post -->
+                                {% if request.user == post.author %}
+                                <div>
+                                    <a href="{% url 'post_edit' post.pk %}">
+                                        <i class="bi bi-pencil-fill"></i></a> |
+                                    <a href="{% url 'post_delete' post.pk %}">
+                                        <i class="bi bi-trash-fill"></i></a>
+                                </div>
+                                {% endif %}
+                            </article>
                         </div>
 
                         <!-- Comments-->
@@ -181,8 +222,19 @@
             </div>
             {% endif %}
         </div>
+
+        <!-- Right sidebar-->
+        <div class="col-sm-2">
+        </div>
+
     </div>
 </div>
+
+<!-- Pagination-->
+{% include 'pagination.html' %}
+
+<br>
+<br>
 
 {% endblock content %}
     

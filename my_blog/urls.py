@@ -25,7 +25,8 @@ from users.views import (
     CustomLoginView,
     ChangePasswordView,
     SignUpView,
-    ProfileView)
+    ProfileView, 
+    ProfilesView)
 from users.forms import LoginForm
 
 urlpatterns = [
