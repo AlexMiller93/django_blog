@@ -1,46 +1,76 @@
-<nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top"  
-    style="background-color: #e3f2fd;">
-    <div class="container">
+<nav class="navbar navbar-expand-md navbar-light bg-body-tertiary fixed-top border-bottom"  
+    style="background-color: lightblue;">
+    <div class="container-fluid">
     {% comment %} <div class="container-fluid"> {% endcomment %}
         
         <!-- Navbar brand-->
-        <a class="navbar-brand mr-4" href="/">My Blog</a>
+        <a class="navbar-brand col-md-3 me-0" href="/">My Blog</a>
 
         <!-- Collapse button -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarToggle"
+        <button class="navbar-toggler" type="button" data-toggle="collapse" 
+        data-target="#navbarNav" aria-controls="navbarToggle"
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <!-- Navbar collapse -->
-        <div class="collapse navbar-collapse " id="navbarNav">
-            <div class="navbar-nav mr-auto">
-                <a href="/" style="color:blue; margin-right: 10px;">
-                    <i class="bi bi-house-door-fill"></i>
-                </a>
-            </div>
-            {% comment %} <ul class="nav justify-content-end"> {% endcomment %}
-                
-            <ul class="navbar-nav">
+        <div class="navbar-collapse d-md-flex collapse show" id="navbarNav">
+            
+            
+            <!-- Profile/Create Post -->
+            <ul class="navbar-nav col-md-6 justify-content-md-center">
+                <li class="nav-item">
+                    <a class="nav-link link-dark px-2"
+                    href="/">Home</a>
+                </li>
                 {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" 
-                            href="{% url 'user_profile' user.profile.pk %}" 
-                            style="color:green;">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}" 
-                            style="color:dark;">Logout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'post_create' %}" 
-                            style="color:red;">Create Post</a>
-                    </li>
-                {% else %}
-                    <a class="nav-item nav-link" href="{% url 'login' %}" 
-                        style="color:purple;">Sign In</a>
+                <li class="nav-item">
+                    <a class="nav-link link-primary px-2" 
+                    href="{% url 'user_profile' user.profile.pk %}" 
+                    >Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-danger px-2" 
+                    href="{% url 'post_create' %}">Create Post</a>
+                </li>
                 {% endif %}
             </ul>
+
+            <!-- Sign in/Logout -->
+            <ul class="nav col-md-3 justify-content-md-center">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link link-dark px-2" 
+                        href="{% url 'logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link px-2" 
+                        href="{% url 'login' %}" 
+                        style="color:purple;">Login In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link link-dark px-2" 
+                        href="{% url 'user_signup' %}" 
+                        >Register</a>
+                    </li>
+                {% endif %}
+                
+            </ul>
+
+            <!-- Search form -->
+            <div class="navbar-nav col-md-3 justify-content-md-end">
+                {% block searchform %}
+                    <form class="form-inline my-2 my-lg-0 ml-5" 
+                        action="{% url 'search_posts' %}" method="get">
+                        <input name="q" type="text" placeholder="Search posts..">
+                        <button class="btn btn-success my-2 my-sm-0 ml-4" 
+                        type="submit">Search
+                    </button>
+                    </form>
+                {% endblock searchform %}
+            </div>
+
         </div> <!--./ Navbar collapse -->
     </div>
 </nav>

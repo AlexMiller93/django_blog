@@ -1,9 +1,10 @@
-{% extends 'base.html' %}
+{% comment %} {% load users/profiles_list %} {% endcomment %}
 
-{% block sidebar %}
-
-{% comment %} {% for profile in profiles %} {% endcomment %}
-<h1>SideBar</h1>
-
+<p class="text-center">Users:</p>
     
-{% endblock sidebar %}
+{% if profiles %}
+    {% for profile in profiles %}
+        <p>{{ profile.user }}</p>
+        <hr>
+    {% endfor %}
+{% endif %}

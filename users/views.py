@@ -76,12 +76,14 @@ class ProfileView(LoginRequiredMixin, View):
         posts = Post.objects.filter(author=profile.user).order_by('-date_created')
         user_form = UpdateUserForm(instance=request.user)
         profile_form = UpdateProfileForm(instance=request.user.profile)
+        paginate_by = 3
         
         context = {
             'profile': profile,
             'posts': posts,
             'user_form': user_form,
-            'profile_form': profile_form
+            'profile_form': profile_form,
+            'paginate_by': paginate_by
         }
         return render(request, 'users/profile.html', context)
     
@@ -106,6 +108,14 @@ class ProfileView(LoginRequiredMixin, View):
         }
         
         return render(request, 'users/profile.html', context)
+
+class ProfilesView(View):
+    def get(self, request, *args, **kwargs):
+        template_name = 'sidebar.html'
+        profiles = Profile.objects.all()
+        
+        context = {'profiles': profiles}
+        return render(request, template_name, context)
 
 class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     template_name = 'users/change_password.html'
