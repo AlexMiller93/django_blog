@@ -37,8 +37,9 @@ Create an account, write posts, comments other posts, like posts and have fun ;)
 
 ## Installing
 
-Use 'git clone git@github.com:AlexMiller93/django_blog.git' to clone repo on your local machine.
-Use 'pipenv shell' to activate virtual env.
+Use `git clone git@github.com:AlexMiller93/django_blog.git` to clone repo on your local machine.
+
+Use `pipenv shell` to activate virtual env.
 
 ## Usage
 
